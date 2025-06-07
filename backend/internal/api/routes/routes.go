@@ -9,7 +9,13 @@ import (
 
 func MountRoutes(router *chi.Mux) {
 	webhookService := webhookservice.NewWebhookService(&webhook.MongoWebhookRepo{Client: db.GetClient()})
+	webhooksRouter := chi.NewRouter()
 
-	//Temporary
-	router.Get("/", webhookService.TestController)
+	webhooksRouter.Get("/", webhookService.GetWebhooks)
+	webhooksRouter.Get("/{id}", webhookService.GetWebhookById)
+	webhooksRouter.Delete("/{id}", webhookService.DeleteWebhook)
+	webhooksRouter.Post("/", webhookService.CreateWebhook)
+	webhooksRouter.Patch("/{id}", webhookService.UpdateWebhook)
+
+	router.Mount("/webhooks", webhooksRouter)
 }

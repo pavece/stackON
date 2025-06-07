@@ -50,7 +50,7 @@ func (repo *MongoWebhookRepo) CreateWebhook(webhook *Webhook) (*Webhook, error) 
 	return webhook, err
 }
 
-func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated Webhook) (*Webhook, error) {
+func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated *Webhook) (*Webhook, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -65,7 +65,11 @@ func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated Webhook) (*Webhoo
 			{Key: "instructionConnections", Value: updated.InstructionConnections},
 		},
 	}})
+	if err != nil {
+		return nil, err
+	}
 	
+
 	updatedDocument, err := repo.GetWebhookById(id)
 	return updatedDocument, err
 }

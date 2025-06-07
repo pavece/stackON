@@ -33,7 +33,10 @@ func main() {
 
 	//Setup http server + chi
 	chiRouter := chi.NewRouter()
-	routes.MountRoutes(chiRouter)
+	apiRouter := chi.NewRouter()
+	chiRouter.Mount("/api", apiRouter)
+
+	routes.MountRoutes(apiRouter)
 
 	httpServer := &http.Server{
 		Handler: chiRouter,

@@ -27,14 +27,13 @@ type InstructionConnection struct {
 }
 
 type Webhook struct {
-	Id    					primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Type  					string `bson:"type" json:"type"`
-	Topic 					string `bson:"topic" json:"topic"`
-	InstructionNodes 		[]InstructionNode `bson:"instructionNodes" json:"instructionNodes"`
-	InstructionConnections  []InstructionConnection `bson:"instructionConnections" json:"instructionConnections"`
-	CreatedAt				time.Time `bson:"createdAt,omitempty" json:"createdAt"`
+	Id                     primitive.ObjectID     `bson:"_id,omitempty" json:"id"`
+	Type                   string                 `bson:"type" json:"type" validate:"required"`
+	Topic                  string                 `bson:"topic" json:"topic" validate:"required"`
+	InstructionNodes       []InstructionNode      `bson:"instructionNodes" json:"instructionNodes" validate:"required,dive"`
+	InstructionConnections []InstructionConnection `bson:"instructionConnections" json:"instructionConnections" validate:"required,dive"`
+	CreatedAt              time.Time              `bson:"createdAt,omitempty" json:"createdAt"`
 }
-
 type WebhookRepository interface {
 	GetWebhookById(id string) (*Webhook, error)
 	GetWebhooks() ([]Webhook, error)
