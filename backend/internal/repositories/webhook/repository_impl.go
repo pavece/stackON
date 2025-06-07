@@ -50,8 +50,24 @@ func (repo *MongoWebhookRepo) CreateWebhook(webhook *Webhook) (*Webhook, error) 
 	return webhook, err
 }
 
-func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated Webhook) Webhook {
-	return Webhook{}
+func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated Webhook) (*Webhook, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	
+	_, err = repo.Client.Database("stackON").Collection("webhooks").UpdateOne(context.Background(), bson.M{"_id": objId}, bson.D{{
+		Key: "$set",
+		Value: bson.D{
+			{Key: "type", Value: updated.Type},
+			{Key: "topic", Value: updated.Topic},
+			{Key: "instructionNodes", Value: updated.InstructionNodes},
+			{Key: "instructionConnections", Value: updated.InstructionConnections},
+		},
+	}})
+	
+	updatedDocument, err := repo.GetWebhookById(id)
+	return updatedDocument, err
 }
 
 func (repo *MongoWebhookRepo) DeleteWebhook(id string) (*Webhook, error) {
