@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/pavece/stackON/internal/api/routes"
 	"github.com/pavece/stackON/internal/db"
+	mqttclient "github.com/pavece/stackON/internal/mqtt"
 )
 
 
@@ -19,6 +20,7 @@ func main() {
 	godotenv.Load()
 	port := os.Getenv("PORT")
 	dbConUrl := os.Getenv("MONGO_CONNECTION_URL")
+	mqttBrokerUrl := os.Getenv("MQTT_BROKER_URL")
 
 	if port == "" {
 		port = "3000"
@@ -28,8 +30,15 @@ func main() {
 		log.Fatal("[ERROR] Database connection URL must be defined in env variables")
 	}
 
+	if mqttBrokerUrl == "" {
+		log.Fatal("[ERROR] MQTT broker url must be defined in env variables")
+	}
+
 	//Setup mongo db
 	db.Start(dbConUrl)
+
+	//Setup mqtt
+	mqttclient.InitClient(mqttBrokerUrl)
 
 	//Setup http server + chi
 	chiRouter := chi.NewRouter()
