@@ -1,6 +1,10 @@
 package webhook
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 //Needs review
 type Position struct {
@@ -23,7 +27,7 @@ type InstructionConnection struct {
 }
 
 type Webhook struct {
-	Id    					string `bson:"_id,omitempty" json:"id"`
+	Id    					primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	Type  					string `bson:"type" json:"type"`
 	Topic 					string `bson:"topic" json:"topic"`
 	InstructionNodes 		[]InstructionNode `bson:"instructionNodes" json:"instructionNodes"`
@@ -31,18 +35,10 @@ type Webhook struct {
 	CreatedAt				time.Time `bson:"createdAt,omitempty" json:"createdAt"`
 }
 
-type DTOWebhook struct {
-	Type  					string `bson:"type" json:"type"`
-	Topic 					string `bson:"topic" json:"topic"`
-	InstructionNodes 		[]InstructionNode `bson:"instructionNodes" json:"instructionNodes"`
-	InstructionConnections  []InstructionConnection `bson:"instructionConnections" json:"instructionConnections"`
-	// CreatedAt				time.Time `bson:"createdAt,omitempty" json:"createdAt"`
-}
-
 type WebhookRepository interface {
-	GetWebhookById(id string) Webhook
-	GetWebhooks() []Webhook
-	CreateWebhook(webhook Webhook) Webhook
-	UpdateWebhook(id string, updated Webhook) Webhook
-	DeleteWebhook(id string) Webhook
+	GetWebhookById(id string) (*Webhook, error)
+	GetWebhooks() ([]Webhook, error)
+	CreateWebhook(webhook *Webhook) (*Webhook, error)
+	UpdateWebhook(id string, updated Webhook) (*Webhook, error)
+	DeleteWebhook(id string) (*Webhook, error)
 }
