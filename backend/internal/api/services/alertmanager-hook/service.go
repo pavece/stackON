@@ -1,10 +1,14 @@
 package alertmanagerhookservice
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 	"github.com/pavece/stackON/internal/api"
 	"github.com/pavece/stackON/internal/repositories/webhook"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -15,11 +19,31 @@ type HookService struct {
 	mqttClient mqtt.Client
 }
 
+type MQTTResponse struct {
+	EventId string `json:"eventId"`
+	HandleType string `json:"handleType"`
+	Instructions string `json:"instructions"`//TODO: Define the instructions type
+	Status string `json:"status"`
+}
+
+type MQTTAlertGroup struct {
+	Status       string            `json:"status" validate:"required,oneof=firing resolved"`
+	CommonLabels map[string]string `json:"commonLabels" validate:"required"`
+}
+
 func New(mongoRepo *webhook.MongoWebhookRepo, mqttClient mqtt.Client) *HookService{
 	return &HookService{repo: mongoRepo, mqttClient: mqttClient}
 }
 
 func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
+	var alertPayload MQTTAlertGroup
+	err := json.NewDecoder(r.Body).Decode(&alertPayload)
+	
+	if err != nil {
+		api.SendError(w, 401, "Please include the alert information in prometheus alert manager format")
+		return
+	}
+
 	webhookId := chi.URLParam(r, "id")
 	webhook, err := svc.repo.GetWebhookById(webhookId)
 
@@ -28,6 +52,51 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	svc.mqttClient.Publish("test/topic", 0, false, "Hello from go " + webhookId)
-	api.SendJson(w, 200, map[string]interface{}{"webhookId": webhookId, "webhookTopic": webhook.Topic})
+	if webhook.Type != "latch" && webhook.Type != "temp" {
+		api.SendError(w, 401, "Invalid webhook type expected latch or temp")
+		return
+	}
+
+	err = validateMQTTGroup(alertPayload)
+	if err != nil {
+		api.SendError(w, 401, err.Error())
+		return
+	}
+
+	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["job"])
+
+	if alertPayload.Status != "resolve" {
+		//TODO: Add fire event to DB
+		//TODO: Count fire event with prometheus
+	} 
+
+	mqttResponse := MQTTResponse{EventId: eventId, HandleType: webhook.Type, Instructions: "TODO", Status: alertPayload.Status}
+	marshallReponse, err := json.Marshal(mqttResponse)
+
+	if err != nil {
+		api.SendError(w, 500, "Error converting JSON response")
+		return
+	}
+
+	svc.mqttClient.Publish(webhook.Topic, 0, false, marshallReponse)
+	api.SendJson(w, 200, mqttResponse)
+}
+
+func validateMQTTGroup(alertPayload MQTTAlertGroup) error { 
+	validate := validator.New()
+	err := validate.Struct(alertPayload)	
+	
+	if err != nil {
+		var errorsDesc string
+		for _, e := range err.(validator.ValidationErrors) {
+			errorsDesc += e.Field() + " is " + e.Tag() + " | "
+		}
+		return errors.New(errorsDesc)
+	}
+
+	if alertPayload.CommonLabels["alertname"] == "" || alertPayload.CommonLabels["instance"] == "" || alertPayload.CommonLabels["job"] == "" {
+		return errors.New("please include alertname, instance and job in the commonLabels field")
+	}
+
+	return nil
 }

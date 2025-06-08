@@ -23,7 +23,7 @@ func MountRoutes(router *chi.Mux) {
 
 	//Prometheus alert manager specific
 	amHookService := alertmanagerhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client)
-	hookRouter.Get("/am/{id}", amHookService.ForwardEvent)
+	hookRouter.Post("/am/{id}", amHookService.ForwardEvent)
 
 	//More services (grafana, pagerduty ...)
 
