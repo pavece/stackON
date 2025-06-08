@@ -6,6 +6,7 @@ import (
 	webhookservice "github.com/pavece/stackON/internal/api/services/webhooks"
 	"github.com/pavece/stackON/internal/db"
 	mqttclient "github.com/pavece/stackON/internal/mqtt"
+	"github.com/pavece/stackON/internal/repositories/event"
 	"github.com/pavece/stackON/internal/repositories/webhook"
 )
 
@@ -22,7 +23,7 @@ func MountRoutes(router *chi.Mux) {
 	hookRouter := chi.NewRouter()
 
 	//Prometheus alert manager specific
-	amHookService := alertmanagerhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client)
+	amHookService := alertmanagerhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client, &event.MongoEventRepo{Client: db.GetClient()})
 	hookRouter.Post("/am/{id}", amHookService.ForwardEvent)
 
 	//More services (grafana, pagerduty ...)

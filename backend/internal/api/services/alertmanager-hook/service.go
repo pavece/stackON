@@ -5,17 +5,20 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"github.com/pavece/stackON/internal/api"
+	"github.com/pavece/stackON/internal/repositories/event"
 	"github.com/pavece/stackON/internal/repositories/webhook"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type HookService struct {
-	repo *webhook.MongoWebhookRepo
+	webhookRepo *webhook.MongoWebhookRepo
+	eventRepo *event.MongoEventRepo
 	mqttClient mqtt.Client
 }
 
@@ -31,8 +34,8 @@ type MQTTAlertGroup struct {
 	CommonLabels map[string]string `json:"commonLabels" validate:"required"`
 }
 
-func New(mongoRepo *webhook.MongoWebhookRepo, mqttClient mqtt.Client) *HookService{
-	return &HookService{repo: mongoRepo, mqttClient: mqttClient}
+func New(mongoRepo *webhook.MongoWebhookRepo, mqttClient mqtt.Client, eventMongoRepo *event.MongoEventRepo) *HookService{
+	return &HookService{webhookRepo: mongoRepo, mqttClient: mqttClient, eventRepo:  eventMongoRepo}
 }
 
 func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
@@ -45,7 +48,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	webhookId := chi.URLParam(r, "id")
-	webhook, err := svc.repo.GetWebhookById(webhookId)
+	webhook, err := svc.webhookRepo.GetWebhookById(webhookId)
 
 	if err == mongo.ErrNoDocuments {
 		api.SendError(w, 404, "Webhook not found")
@@ -64,9 +67,12 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["job"])
+	//TODO: Convert node - edges to instructions array
 
 	if alertPayload.Status != "resolve" {
-		//TODO: Add fire event to DB
+		//Error will be ignored as it's not critical
+		svc.eventRepo.CreateEvent(&event.Event{FiredAt: time.Now(), EventId: eventId, WebhookId: webhook.Id})
+		
 		//TODO: Count fire event with prometheus
 	} 
 
