@@ -42,10 +42,8 @@ func main() {
 
 	//Setup http server + chi
 	chiRouter := chi.NewRouter()
-	apiRouter := chi.NewRouter()
-	chiRouter.Mount("/api", apiRouter)
 
-	routes.MountRoutes(apiRouter)
+	routes.MountRoutes(chiRouter)
 
 	httpServer := &http.Server{
 		Handler: chiRouter,
@@ -56,6 +54,6 @@ func main() {
 
 	err := httpServer.ListenAndServe()
 	if err != nil {
-		log.Fatal("[ERROR] HTTP server error")
+		log.Fatal("[ERROR] HTTP server error", err)
 	}
 }

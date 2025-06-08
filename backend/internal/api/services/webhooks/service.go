@@ -16,7 +16,7 @@ type WebhookService struct {
 	Repo *webhook.MongoWebhookRepo
 }
 
-func NewWebhookService(mongoRepo *webhook.MongoWebhookRepo) *WebhookService{
+func New(mongoRepo *webhook.MongoWebhookRepo) *WebhookService{
 	return &WebhookService{Repo: mongoRepo}
 }
 
