@@ -60,6 +60,8 @@ func (repo *MongoWebhookRepo) UpdateWebhook(id string, updated *Webhook) (*Webho
 		Key: "$set",
 		Value: bson.D{
 			{Key: "type", Value: updated.Type},
+			{Key: "title", Value: updated.Title},
+			{Key: "description", Value: updated.Description},
 			{Key: "topic", Value: updated.Topic},
 			{Key: "instructionNodes", Value: updated.InstructionNodes},
 			{Key: "instructionConnections", Value: updated.InstructionConnections},

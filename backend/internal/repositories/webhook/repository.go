@@ -28,6 +28,8 @@ type InstructionConnection struct {
 
 type Webhook struct {
 	Id                     primitive.ObjectID     `bson:"_id,omitempty" json:"id"`
+	Title				   string				  `bson:"title" json:"title" validate:"required"`
+	Description			   string				  `bson:"description" json:"description" validate:"required"`
 	Type                   string                 `bson:"type" json:"type" validate:"required"`
 	Topic                  string                 `bson:"topic" json:"topic" validate:"required"`
 	InstructionNodes       []InstructionNode      `bson:"instructionNodes" json:"instructionNodes" validate:"required,dive"`
