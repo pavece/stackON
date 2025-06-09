@@ -1,5 +1,6 @@
-import { Copy } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useState } from 'react';
 
 interface Props {
 	title: string;
@@ -9,6 +10,14 @@ interface Props {
 }
 
 export const CallUrl = ({ title, description, method, url }: Props) => {
+	const [copied, setCopied] = useState(false);
+
+	const copyURL = () => {
+		navigator.clipboard.writeText(url).then(() => {
+			setCopied(true);
+		});
+	};
+
 	return (
 		<div className='mt-5'>
 			<h3 className='text-lg'>{title}</h3>
@@ -22,8 +31,8 @@ export const CallUrl = ({ title, description, method, url }: Props) => {
 					</div>
 				</div>
 
-				<Button className='font-sans'>
-					<Copy /> Copy
+				<Button className='font-sans' onClick={copyURL}>
+					{copied ? <Check /> : <Copy />} Copy
 				</Button>
 			</div>
 		</div>

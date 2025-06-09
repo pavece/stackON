@@ -2,6 +2,7 @@ import type { ReducedWebhook } from '@/interfaces/webhook.interface';
 import { Button } from '../ui/button';
 import { WebhookCard } from './webhook-card';
 import { Frown, Plus } from 'lucide-react';
+import { Link } from 'react-router';
 
 interface Props {
 	title: string;
@@ -10,7 +11,7 @@ interface Props {
 	webhooks: ReducedWebhook[];
 }
 
-export const WebhooksContainerSection = ({ title, description, webhooks }: Props) => {
+export const WebhooksContainerSection = ({ title, description, webhooks, typeKey }: Props) => {
 	return (
 		<section className='mb-10'>
 			<div className='flex justify-between items-center'>
@@ -18,8 +19,10 @@ export const WebhooksContainerSection = ({ title, description, webhooks }: Props
 					<h1 className='font-semibold text-2xl'>{title}</h1>
 					<p className='text-md text-muted-foreground mt-2'>{description}</p>
 				</div>
-				<Button>
-					<Plus /> Add new
+				<Button asChild>
+					<Link to={`/create/webhook?type=${typeKey}`}>
+						<Plus /> Add new
+					</Link>
 				</Button>
 			</div>
 

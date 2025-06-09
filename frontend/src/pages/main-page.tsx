@@ -26,7 +26,7 @@ export const MainPage = () => {
 			<WebhooksContainerSection
 				title='Once hooks'
 				description='These hooks will execute the instruction set only once. They dont require a resolve event.'
-				typeKey='latch'
+				typeKey='once'
 				webhooks={data!.data.filter(w => w.type == 'once')}
 			/>
 		</div>
