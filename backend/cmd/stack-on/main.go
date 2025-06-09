@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	"github.com/pavece/stackON/internal/api/routes"
 	"github.com/pavece/stackON/internal/db"
@@ -42,6 +43,14 @@ func main() {
 
 	//Setup http server + chi
 	chiRouter := chi.NewRouter()
+	chiRouter.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},    
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},     
+		ExposedHeaders:   []string{"*"},     
+		AllowCredentials: false,             
+		MaxAge:           300,               
+	}))
 
 	routes.MountRoutes(chiRouter)
 
