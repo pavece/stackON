@@ -1,19 +1,19 @@
 import { fetchWebhooks } from '@/api/api-client';
 import { WebhooksContainerSection } from '@/components/main-page/webhooks-container-section';
+import { Error } from '@/components/ui/error';
+import { Loading } from '@/components/ui/loading';
 import { useQuery } from '@tanstack/react-query';
 
 export const MainPage = () => {
 	const { isLoading, isError, data } = useQuery({ queryKey: ['webhooks'], queryFn: fetchWebhooks });
 
 	if (isLoading) {
-		return <h1>loading</h1>;
+		return <Loading />;
 	}
 
 	if (isError) {
-		return <h1>Error</h1>;
+		return <Error error='Error while loading data from the API, is the backend running ?' />;
 	}
-
-	console.log(import.meta.env.API_URL);
 
 	return (
 		<div>
