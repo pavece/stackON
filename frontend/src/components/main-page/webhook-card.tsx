@@ -1,5 +1,4 @@
 import type { ReducedWebhook } from '@/interfaces/webhook.interface';
-import { Button } from '../ui/button';
 import { AlignJustify, Ellipsis, Pen } from 'lucide-react';
 import {
 	DropdownMenu,
@@ -22,9 +21,7 @@ export const WebhookCard = ({ webhook }: { webhook: ReducedWebhook }) => {
 			<div>
 				<DropdownMenu>
 					<DropdownMenuTrigger>
-						<Button variant='ghost'>
-							<Ellipsis />
-						</Button>
+						<Ellipsis />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
 						<DropdownMenuItem asChild className='cursor-pointer'>
