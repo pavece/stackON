@@ -18,10 +18,11 @@ const formSchema = z.object({
 interface Props {
 	type: 'latch' | 'once';
 	isCreation: boolean;
+	submiting: boolean;
 	onSubmit: (values: z.infer<typeof formSchema>) => void;
 }
 
-export const WebhookForm = ({ onSubmit, type, isCreation }: Props) => {
+export const WebhookForm = ({ onSubmit, type, isCreation, submiting: creating }: Props) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -104,9 +105,15 @@ export const WebhookForm = ({ onSubmit, type, isCreation }: Props) => {
 					)}
 				/>
 
-				<Button type='submit' className='w-full'>
-					{isCreation ? 'Create' : 'Update'}
-				</Button>
+				{creating ? (
+					<Button type='submit' className='w-full' disabled>
+						Loading...
+					</Button>
+				) : (
+					<Button type='submit' className='w-full'>
+						{isCreation ? 'Create' : 'Update'}
+					</Button>
+				)}
 			</form>
 		</Form>
 	);

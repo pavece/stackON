@@ -1,14 +1,33 @@
 import { z } from 'zod';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { WebhookForm } from '@/components/creation-page/webhook-form';
+import { useMutation } from '@tanstack/react-query';
+import { createWebhook } from '@/api/api-client';
+import type { Webhook } from '@/interfaces/webhook.interface';
+import { toast } from 'sonner';
 
 const typeSchema = z.enum(['latch', 'once']);
 
 export const CreateWebhookPage = () => {
 	const [params] = useSearchParams();
+	const navigate = useNavigate();
+
+	const createWebhookMutation = useMutation({
+		mutationFn: createWebhook,
+		onSuccess: result => {
+			navigate(`/webhook/${result.data.id}`);
+		},
+		onError: error => {
+			toast.error(`Error while creating the webhook (${error.message})`);
+		},
+	});
 
 	function onSubmit(values: object) {
-		console.log(values);
+		createWebhookMutation.mutate({
+			...values,
+			instructionConnections: [] as object[],
+			instructionNodes: [] as object[],
+		} as Webhook);
 	}
 
 	return (
@@ -20,7 +39,7 @@ export const CreateWebhookPage = () => {
 
 			<div className='grid  grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-10 mt-10 h-[70vh] gap-4'>
 				<div className='col-span-1 md:col-span-4 lg:col-span-3'>
-					<WebhookForm onSubmit={onSubmit} type={typeSchema.safeParse(params.get('type')).data || 'once'} isCreation />
+					<WebhookForm onSubmit={onSubmit} type={typeSchema.safeParse(params.get('type')).data || 'once'} submiting={createWebhookMutation.isPending} isCreation />
 				</div>
 				<div className='rounded-md border col-span-1 md:col-span-6 lg:col-span-7 '></div>
 			</div>

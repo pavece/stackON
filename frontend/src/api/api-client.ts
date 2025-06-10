@@ -3,7 +3,7 @@ import 'axios';
 import axios from 'axios';
 
 export const apiClient = axios.create({
-	baseURL: import.meta.env.VITE_PUBLIC_API_URL + "/api" || 'http://localhost:3000/api',
+	baseURL: import.meta.env.VITE_PUBLIC_API_URL + '/api' || 'http://localhost:3000/api',
 	timeout: 1000,
 });
 
@@ -12,5 +12,9 @@ export const fetchWebhooks = async () => {
 };
 
 export const fetchWebhook = async (id: string) => {
-	return await apiClient.get<Webhook>("/webhooks/" + id)
-}
+	return await apiClient.get<Webhook>('/webhooks/' + id);
+};
+
+export const createWebhook = async (webhook: Webhook) => {
+	return await apiClient.post<Webhook>('/webhooks', webhook);
+};
