@@ -1,3 +1,4 @@
+import type { Event } from '@/components/fired-events-page/columns';
 import { type Webhook, type ReducedWebhook } from '@/interfaces/webhook.interface';
 import 'axios';
 import axios from 'axios';
@@ -25,4 +26,8 @@ export const updateWebhook = async (webhook: Webhook) => {
 
 export const deleteWebhook = async (id: string) => {
 	return await apiClient.delete<Webhook>(`/webhooks/${id}`);
+};
+
+export const fetchEvents = async () => {
+	return await apiClient.get<Event[] | null>('/events');
 };

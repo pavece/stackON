@@ -16,7 +16,7 @@ export const WebhooksContainerSection = ({ title, description, webhooks, typeKey
 		<section className='mb-10'>
 			<div className='flex justify-between items-center'>
 				<div className='max-w-[550px]'>
-					<h1 className='font-semibold text-2xl'>{title}</h1>
+					<h1 className='font-semibold text-3xl'>{title}</h1>
 					<p className='text-md text-muted-foreground mt-2'>{description}</p>
 				</div>
 				<Button asChild>
