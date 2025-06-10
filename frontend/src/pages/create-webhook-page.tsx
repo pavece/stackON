@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createWebhook } from '@/api/api-client';
 import type { Webhook } from '@/interfaces/webhook.interface';
 import { toast } from 'sonner';
+import { DiagramEditor } from '@/components/creation-page/diagram-editor';
 
 const typeSchema = z.enum(['latch', 'once']);
 
@@ -39,9 +40,16 @@ export const CreateWebhookPage = () => {
 
 			<div className='grid  grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-10 mt-10 h-[70vh] gap-4'>
 				<div className='col-span-1 md:col-span-4 lg:col-span-3'>
-					<WebhookForm onSubmit={onSubmit} type={typeSchema.safeParse(params.get('type')).data || 'once'} submiting={createWebhookMutation.isPending} isCreation />
+					<WebhookForm
+						onSubmit={onSubmit}
+						type={typeSchema.safeParse(params.get('type')).data || 'once'}
+						submiting={createWebhookMutation.isPending}
+						isCreation
+					/>
 				</div>
-				<div className='rounded-md border col-span-1 md:col-span-6 lg:col-span-7 '></div>
+				<div className='rounded-lg border  col-span-1 md:col-span-6 lg:col-span-7 '>
+					<DiagramEditor />
+				</div>
 			</div>
 		</div>
 	);
