@@ -24,37 +24,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Plus } from 'lucide-react';
 import type { InstructionNode } from '@/interfaces/node.interface';
+import { useInstruictionDiagramStore } from '@/stores/instruction-diagram-store';
 
 const nodeTypes = {
 	normal: NormalNode,
 	entry: EntryNode,
 };
-
-const initialNodes: InstructionNode[] = [
-	{
-		id: '1',
-		position: { x: 0, y: 0 },
-		type: 'entry',
-		data: { label: 'Turn on', instruction: 'on:red', instructionType: 'on', instructionValue: 'RED' },
-	},
-	{
-		id: '2',
-		position: { x: 0, y: 150 },
-		type: 'normal',
-		data: { label: 'Wait', instruction: 'wait:10', instructionType: 'wait', instructionValue: '10' },
-	},
-	{
-		id: '3',
-		position: { x: 0, y: 300 },
-		data: { label: 'Turn off', instruction: 'off:red', instructionType: 'off', instructionValue: 'RED' },
-		type: 'normal',
-	},
-];
-
-const initialEdges = [
-	{ id: '1-2', source: '1', target: '2' },
-	{ id: '2-3', source: '2', target: '3' },
-];
 
 const findDisconnectedNode = (edges: Edge[]) => {
 	const nodeConnections: { [key: string]: number } = {};
@@ -74,18 +49,31 @@ const findDisconnectedNode = (edges: Edge[]) => {
 };
 
 export const DiagramEditor = () => {
-	const [nodes, setNodes] = useState(initialNodes);
-	const [edges, setEdges] = useState(initialEdges);
+	const {
+		edges,
+		nodes,
+		setEdges,
+		setNodes,
+		addNode: stateAddNode,
+		addEdge: stateAddEdge,
+	} = useInstruictionDiagramStore();
+
 	const [lastId, setLastId] = useState(3);
 
 	const onNodesChange = useCallback(
-		(changes: NodeChange<InstructionNode>[]) => setNodes(nds => applyNodeChanges(changes, nds)),
-		[]
+		(changes: NodeChange<InstructionNode>[]) => setNodes(applyNodeChanges(changes, nodes)),
+		[nodes, setNodes]
 	);
-	const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges(eds => applyEdgeChanges(changes, eds)), []);
-	const onConnect = useCallback<OnConnect>(params => setEdges(eds => addEdge(params, eds)), []);
+
+	const onEdgesChange = useCallback(
+		(changes: EdgeChange[]) => setEdges(applyEdgeChanges(changes, edges)),
+		[setEdges, edges]
+	);
+
+	const onConnect = useCallback<OnConnect>(params => setEdges(addEdge(params, edges)), [setEdges, edges]);
 
 	const onAddNode = (type: 'on' | 'off' | 'wait', label: string, defaultValue: string) => {
+		console.log(nodes);
 		const newNode: InstructionNode = {
 			id: String(lastId + 1),
 			type: 'normal',
@@ -105,8 +93,9 @@ export const DiagramEditor = () => {
 			target: String(lastId + 1),
 		};
 
-		setNodes(nds => nds.concat(newNode));
-		setEdges(edg => edg.concat(newEdge));
+		stateAddNode(newNode);
+		stateAddEdge(newEdge);
+
 		setLastId(id => id + 1);
 	};
 

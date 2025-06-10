@@ -47,8 +47,11 @@ export const CreateWebhookPage = () => {
 						isCreation
 					/>
 				</div>
-				<div className='rounded-lg border  col-span-1 md:col-span-6 lg:col-span-7 '>
-					<DiagramEditor />
+				<div className='col-span-1 md:col-span-6 lg:col-span-7'>
+					<span className='font-medium'>Instructions</span>
+					<div className='rounded-lg border w-full h-full'>
+						<DiagramEditor />
+					</div>
 				</div>
 			</div>
 		</div>
