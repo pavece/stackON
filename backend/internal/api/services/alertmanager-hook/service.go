@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -25,7 +26,7 @@ type HookService struct {
 type MQTTResponse struct {
 	EventId string `json:"eventId"`
 	HandleType string `json:"handleType"`
-	Instructions string `json:"instructions"`//TODO: Define the instructions type
+	Instructions []string `json:"instructions"`//TODO: Define the instructions type
 	Status string `json:"status"`
 }
 
@@ -55,8 +56,8 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	if webhook.Type != "latch" && webhook.Type != "temp" {
-		api.SendError(w, 400, "Invalid webhook type expected latch or temp")
+	if webhook.Type != "latch" && webhook.Type != "once" {
+		api.SendError(w, 400, "Invalid webhook type expected latch or once")
 		return
 	}
 
@@ -67,7 +68,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["job"])
-	//TODO: Convert node - edges to instructions array
+	instructionSet := convertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
 	if alertPayload.Status != "resolve" {
 		//Error will be ignored as it's not critical
@@ -76,7 +77,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 		//TODO: Count fire event with prometheus
 	} 
 
-	mqttResponse := MQTTResponse{EventId: eventId, HandleType: webhook.Type, Instructions: "TODO", Status: alertPayload.Status}
+	mqttResponse := MQTTResponse{EventId: eventId, HandleType: webhook.Type, Instructions: instructionSet, Status: alertPayload.Status}
 	marshallReponse, err := json.Marshal(mqttResponse)
 
 	if err != nil {
@@ -105,4 +106,57 @@ func validateMQTTGroup(alertPayload MQTTAlertGroup) error {
 	}
 
 	return nil
+}
+
+func convertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webhook.InstructionConnection) []string{
+	instructionSet := make([]string, 0, 10)
+
+	currentNode := nodes[0].Id
+
+	for len(edges) > 0 {
+		currentEdgeIdx := indexOfEdgeByStart(currentNode, edges)
+		if(currentEdgeIdx < 0){
+			return instructionSet
+		}
+
+		instruction, err := findInstructionById(currentNode, nodes)
+		if err != nil {
+			return instructionSet
+		}
+
+		instructionSet = append(instructionSet, instruction.Data.Instruction)
+		currentNode = edges[currentEdgeIdx].Target
+
+		edges = slices.Delete(edges, currentEdgeIdx, currentEdgeIdx + 1)	
+
+		if len(edges) < 1 {
+			instruction, err := findInstructionById(currentNode, nodes)
+			if err != nil {
+				return instructionSet
+			}
+
+			instructionSet = append(instructionSet, instruction.Data.Instruction)
+		}
+	}
+
+	return instructionSet
+}
+
+func indexOfEdgeByStart(start string, edges []webhook.InstructionConnection) int {
+	for i, e := range edges {
+		if e.Source == start {
+			return i
+		}
+	}
+	return -1
+}
+
+func findInstructionById(id string, instructions []webhook.InstructionNode) (webhook.InstructionNode, error){
+	for _, in := range instructions {
+		if in.Id == id {
+			return in, nil
+		}
+	}
+
+	return webhook.InstructionNode{}, nil
 }
