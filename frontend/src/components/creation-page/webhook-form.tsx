@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { SelectValue } from '@radix-ui/react-select';
+import type { Webhook } from '@/interfaces/webhook.interface';
 
 const formSchema = z.object({
 	title: z.string().min(2).max(50),
@@ -17,19 +18,20 @@ const formSchema = z.object({
 
 interface Props {
 	type: 'latch' | 'once';
+	initialValues?: Webhook;
 	isCreation: boolean;
 	submiting: boolean;
 	onSubmit: (values: z.infer<typeof formSchema>) => void;
 }
 
-export const WebhookForm = ({ onSubmit, type, isCreation, submiting: creating }: Props) => {
+export const WebhookForm = ({ onSubmit, type, isCreation, initialValues, submiting: creating }: Props) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: '',
-			description: '',
-			topic: '',
-			type,
+			title: initialValues?.title || '',
+			description: initialValues?.description || '',
+			topic: initialValues?.topic || '',
+			type: type,
 		},
 	});
 

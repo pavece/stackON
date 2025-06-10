@@ -6,6 +6,7 @@ import { WebhookDetailPage } from './pages/webhook-detail';
 import { CreateWebhookPage } from './pages/create-webhook-page';
 import { Toaster } from 'sonner';
 import { ReactFlowProvider } from '@xyflow/react';
+import { EditWebhookPage } from './pages/edit-webhook-page';
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ function App() {
 								<Route path='/' element={<MainPage />} />
 								<Route path='/webhook/:id' element={<WebhookDetailPage />} />
 								<Route path='/create/webhook/' element={<CreateWebhookPage />} />
+								<Route path='/edit/webhook/:id' element={<EditWebhookPage />} />
 							</Route>
 						</Routes>
 					</BrowserRouter>

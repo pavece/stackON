@@ -6,12 +6,14 @@ import { createWebhook } from '@/api/api-client';
 import type { Webhook } from '@/interfaces/webhook.interface';
 import { toast } from 'sonner';
 import { DiagramEditor } from '@/components/creation-page/diagram-editor';
+import { useInstruictionDiagramStore } from '@/stores/instruction-diagram-store';
 
 const typeSchema = z.enum(['latch', 'once']);
 
 export const CreateWebhookPage = () => {
 	const [params] = useSearchParams();
 	const navigate = useNavigate();
+	const { nodes, edges } = useInstruictionDiagramStore();
 
 	const createWebhookMutation = useMutation({
 		mutationFn: createWebhook,
@@ -24,10 +26,11 @@ export const CreateWebhookPage = () => {
 	});
 
 	function onSubmit(values: object) {
+		//TODO: Validate workflow nodes
 		createWebhookMutation.mutate({
 			...values,
-			instructionConnections: [] as object[],
-			instructionNodes: [] as object[],
+			instructionConnections: edges,
+			instructionNodes: nodes,
 		} as Webhook);
 	}
 

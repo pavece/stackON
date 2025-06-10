@@ -18,3 +18,7 @@ export const fetchWebhook = async (id: string) => {
 export const createWebhook = async (webhook: Webhook) => {
 	return await apiClient.post<Webhook>('/webhooks', webhook);
 };
+
+export const updateWebhook = async (webhook: Webhook) => {
+	return await apiClient.put<Webhook>(`/webhooks/${webhook.id}`, webhook);
+};
