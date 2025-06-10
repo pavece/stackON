@@ -80,7 +80,7 @@ func (svc *WebhookService) CreateWebhook(w http.ResponseWriter, r *http.Request)
 	err := json.NewDecoder(r.Body).Decode(&fields)
 
 	if err != nil {
-		api.SendError(w, 401, "JSON validation error, please include every field in correct JSON format")
+		api.SendError(w, 400, "JSON validation error, please include every field in correct JSON format")
 		return
 	}
 
@@ -92,7 +92,7 @@ func (svc *WebhookService) CreateWebhook(w http.ResponseWriter, r *http.Request)
 		for _, e := range err.(validator.ValidationErrors) {
 			errors += e.Field() + " is " + e.Tag() + " | "
 		}
-		api.SendError(w, 401, errors)
+		api.SendError(w, 400, errors)
 		return
 	}
 
@@ -113,7 +113,7 @@ func (svc *WebhookService) UpdateWebhook(w http.ResponseWriter, r *http.Request)
 	err := json.NewDecoder(r.Body).Decode(&fields)
 
 	if err != nil {
-		api.SendError(w, 401, "JSON validation error, please include every field in correct JSON format")
+		api.SendError(w, 400, "JSON validation error, please include every field in correct JSON format")
 		return
 	}
 
@@ -125,7 +125,7 @@ func (svc *WebhookService) UpdateWebhook(w http.ResponseWriter, r *http.Request)
 		for _, e := range err.(validator.ValidationErrors) {
 			errors += e.Field() + " is " + e.Tag() + " | "
 		}
-		api.SendError(w, 401, errors)
+		api.SendError(w, 400, errors)
 		return
 	}
 

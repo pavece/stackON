@@ -43,7 +43,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	err := json.NewDecoder(r.Body).Decode(&alertPayload)
 	
 	if err != nil {
-		api.SendError(w, 401, "Please include the alert information in prometheus alert manager format")
+		api.SendError(w, 400, "Please include the alert information in prometheus alert manager format")
 		return
 	}
 
@@ -56,13 +56,13 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	if webhook.Type != "latch" && webhook.Type != "temp" {
-		api.SendError(w, 401, "Invalid webhook type expected latch or temp")
+		api.SendError(w, 400, "Invalid webhook type expected latch or temp")
 		return
 	}
 
 	err = validateMQTTGroup(alertPayload)
 	if err != nil {
-		api.SendError(w, 401, err.Error())
+		api.SendError(w, 400, err.Error())
 		return
 	}
 
