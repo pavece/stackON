@@ -9,6 +9,7 @@ import {
 	type OnConnect,
 	Panel,
 	type Edge,
+	useReactFlow,
 } from '@xyflow/react';
 
 import { useCallback, useState } from 'react';
@@ -57,6 +58,7 @@ export const DiagramEditor = () => {
 		addNode: stateAddNode,
 		addEdge: stateAddEdge,
 	} = useInstruictionDiagramStore();
+	const { fitView } = useReactFlow();
 
 	const [lastId, setLastId] = useState(3);
 
@@ -96,6 +98,11 @@ export const DiagramEditor = () => {
 		stateAddNode(newNode);
 		stateAddEdge(newEdge);
 
+		fitView({
+			nodes: [newNode],
+			duration: 0.8,
+			maxZoom: 1.5,
+		});
 		setLastId(id => id + 1);
 	};
 
