@@ -20,7 +20,7 @@ func MountRoutes(router *chi.Mux) {
 	webhooksRouter.Get("/{id}", webhookService.GetWebhookById)
 	webhooksRouter.Delete("/{id}", webhookService.DeleteWebhook)
 	webhooksRouter.Post("/", webhookService.CreateWebhook)
-	webhooksRouter.Patch("/{id}", webhookService.UpdateWebhook)
+	webhooksRouter.Put("/{id}", webhookService.UpdateWebhook)
 
 	//Fired event history
 	eventService := eventsservice.New(&event.MongoEventRepo{Client: db.GetClient()})

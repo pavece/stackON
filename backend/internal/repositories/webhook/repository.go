@@ -12,10 +12,17 @@ type Position struct {
     Y float64 `bson:"y" json:"y"`
 }
 
+type NodeData struct {
+	Label string `bson:"label" json:"label"`
+	Instruction string `bson:"instruction" json:"instruction"`
+	InstructionValue string `bson:"instructionValue" json:"instructionValue"`
+	InstructionType string `bson:"instructionType" json:"instructionType"`
+}
+
 type InstructionNode struct {
 	Id    	 string `bson:"id" json:"id"`
 	Type  	 string `bson:"type" json:"type"`
-	Data  	 interface{} `bson:"data" json:"data"`
+	Data   	 NodeData `bson:"data" json:"data"`
 	Position Position `bson:"position" json:"position"`
 }
 
