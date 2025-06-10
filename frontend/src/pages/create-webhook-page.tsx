@@ -67,6 +67,10 @@ export const CreateWebhookPage = () => {
 					<div className='rounded-lg border w-full h-full'>
 						<DiagramEditor />
 					</div>
+					<p className='mt-2 text-muted-foreground italic'>
+						If you're creating a latch hook, this instruction set will run indefinitely until a resolve event is
+						received.
+					</p>
 				</div>
 			</div>
 		</div>

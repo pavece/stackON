@@ -22,3 +22,7 @@ export const createWebhook = async (webhook: Webhook) => {
 export const updateWebhook = async (webhook: Webhook) => {
 	return await apiClient.put<Webhook>(`/webhooks/${webhook.id}`, webhook);
 };
+
+export const deleteWebhook = async (id: string) => {
+	return await apiClient.delete<Webhook>(`/webhooks/${id}`);
+};

@@ -55,6 +55,7 @@ export const useInstruictionDiagramStore = create<InstructionDiagramStore>()(set
 			nodes: state.nodes.map(mn => {
 				if (mn.id == id) {
 					mn.data.instructionValue = val;
+					mn.data.instruction = mn.data.instructionType + ':' + val;
 				}
 				return { ...mn };
 			}),

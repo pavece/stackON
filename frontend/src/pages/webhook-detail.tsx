@@ -1,11 +1,13 @@
-import { fetchWebhook } from '@/api/api-client';
+import { deleteWebhook, fetchWebhook } from '@/api/api-client';
 import { Button } from '@/components/ui/button';
+import { DestructiveActionDialog } from '@/components/ui/destructive-action';
 import { Error } from '@/components/ui/error';
 import { Loading } from '@/components/ui/loading';
 import { CallUrl } from '@/components/webhook-detail/call-url';
 import { useQuery } from '@tanstack/react-query';
-import { Folder, Pen, Shapes } from 'lucide-react';
+import { Folder, Pen, Shapes, Trash } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 
 export const WebhookDetailPage = () => {
 	const { id } = useParams();
@@ -28,6 +30,17 @@ export const WebhookDetailPage = () => {
 	if (isError) {
 		return <Error error={`An error occurred while fetching information for hook (${id})`} />;
 	}
+
+	const onDelete = async () => {
+		try {
+			await deleteWebhook(id);
+
+			toast.success('Webhook deleted successfully');
+			navigate('/');
+		} catch {
+			toast.error('Failed to delete webhook');
+		}
+	};
 
 	return (
 		<div>
@@ -52,11 +65,16 @@ export const WebhookDetailPage = () => {
 					</div>
 				</div>
 
-				<Button asChild>
-					<Link to={`/edit/webhook/${id}`}>
-						<Pen /> Edit
-					</Link>
-				</Button>
+				<div className='flex gap-2'>
+					<DestructiveActionDialog action={onDelete}>
+						<Trash /> Delete
+					</DestructiveActionDialog>
+					<Button asChild>
+						<Link to={`/edit/webhook/${id}`}>
+							<Pen /> Edit
+						</Link>
+					</Button>
+				</div>
 			</div>
 
 			<hr className='my-5' />
