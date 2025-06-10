@@ -12,6 +12,7 @@ interface InstructionDiagramStore {
 	addEdge: (edge: Edge) => void;
 	removeEdge: (edge: Edge) => void;
 	updateNodeInstructionValue: (nodeId: string, newValue: string) => void;
+	resetDefaults: () => void;
 }
 
 const initialNodes: InstructionNode[] = [
@@ -58,4 +59,5 @@ export const useInstruictionDiagramStore = create<InstructionDiagramStore>()(set
 				return { ...mn };
 			}),
 		})),
+	resetDefaults: () => set({ nodes: initialNodes, edges: initialEdges }),
 }));

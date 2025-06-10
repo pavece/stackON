@@ -7,13 +7,15 @@ import type { Webhook } from '@/interfaces/webhook.interface';
 import { toast } from 'sonner';
 import { DiagramEditor } from '@/components/creation-page/diagram-editor';
 import { useInstruictionDiagramStore } from '@/stores/instruction-diagram-store';
+import { validateInstructionNodes } from '@/interfaces/instruction-validator';
+import { useEffect } from 'react';
 
 const typeSchema = z.enum(['latch', 'once']);
 
 export const CreateWebhookPage = () => {
 	const [params] = useSearchParams();
 	const navigate = useNavigate();
-	const { nodes, edges } = useInstruictionDiagramStore();
+	const { nodes, edges, resetDefaults } = useInstruictionDiagramStore();
 
 	const createWebhookMutation = useMutation({
 		mutationFn: createWebhook,
@@ -26,13 +28,23 @@ export const CreateWebhookPage = () => {
 	});
 
 	function onSubmit(values: object) {
-		//TODO: Validate workflow nodes
+		const instructionValidationResult = validateInstructionNodes(nodes);
+
+		if (instructionValidationResult) {
+			toast.error(`Webhook instruction set error: ${instructionValidationResult}`);
+			return;
+		}
+
 		createWebhookMutation.mutate({
 			...values,
 			instructionConnections: edges,
 			instructionNodes: nodes,
 		} as Webhook);
 	}
+
+	useEffect(() => {
+		resetDefaults();
+	}, []);
 
 	return (
 		<div>

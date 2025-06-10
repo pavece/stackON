@@ -12,6 +12,7 @@ import { Error } from '@/components/ui/error';
 import { useEffect } from 'react';
 import type { InstructionNode } from '@/interfaces/node.interface';
 import type { Edge } from '@xyflow/react';
+import { validateInstructionNodes } from '@/interfaces/instruction-validator';
 
 const typeSchema = z.enum(['latch', 'once']);
 
@@ -37,7 +38,13 @@ export const EditWebhookPage = () => {
 	});
 
 	function onSubmit(values: object) {
-		//TODO: Validate workflow nodes
+		const instructionValidationResult = validateInstructionNodes(nodes);
+
+		if (instructionValidationResult) {
+			toast.error(`Webhook instruction set error: ${instructionValidationResult}`);
+			return;
+		}
+
 		updateWebhookMutation.mutate({
 			id: webhook?.id,
 			...values,

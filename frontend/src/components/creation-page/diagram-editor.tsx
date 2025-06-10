@@ -78,7 +78,7 @@ export const DiagramEditor = () => {
 		console.log(nodes);
 		const newNode: InstructionNode = {
 			id: String(lastId + 1),
-			type: 'normal',
+			type: nodes.length == 0 ? 'entry' : 'normal',
 			position: { x: 0, y: (nodes.at(-1)?.position.y || 0) + 150 },
 			data: {
 				instruction: type + ':' + defaultValue,
