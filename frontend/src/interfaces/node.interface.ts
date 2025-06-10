@@ -1,7 +1,11 @@
 import type { Node } from '@xyflow/react';
 
-export type InstructionNodeData = Node<{
-	label: string;
-	instruction: string;
-	instructionType: 'on' | 'off' | 'wait';
-}>;
+export type InstructionNode = Node<
+	{
+		label: string;
+		instruction: string;
+		instructionValue: string;
+		instructionType: 'on' | 'off' | 'wait';
+	},
+	'entry' | 'normal'
+>;
