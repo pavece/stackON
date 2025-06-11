@@ -8,6 +8,7 @@ export type Event = {
 	eventId: string;
 	firedAt: Date;
 	webhookId: string;
+	status: string;
 };
 
 export const columns: ColumnDef<Event>[] = [
@@ -30,11 +31,22 @@ export const columns: ColumnDef<Event>[] = [
 		header: 'Event source',
 		cell: ({ row }) => {
 			const splitted = row.original.eventId.split(':');
-			return (
-				<div>
-					{splitted[1]} ({splitted[2]})
-				</div>
-			);
+			return <div>{splitted[1]}</div>;
+		},
+	},
+	{
+		accessorKey: 'status',
+		header: 'Status',
+		cell: ({ row }) => {
+			return <div className={`${row.original.status == 'resolved' && 'text-green-500'}`}>{row.original.status}</div>;
+		},
+	},
+	{
+		accessorKey: 'eventId',
+		header: 'Severity',
+		cell: ({ row }) => {
+			const splitted = row.original.eventId.split(':');
+			return <div>{splitted.at(-1)}</div>;
 		},
 	},
 	{
