@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -55,12 +56,22 @@ func main() {
 		MaxAge:           300,               
 	}))
 
-	//Serve	public path (for the frontend)
 	routes.MountRoutes(chiRouter)
-	chiRouter.Handle("/*", http.FileServer(http.Dir("public/dist")))
-	chiRouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
+
+	//Serve	public path (for the frontend)
+	fileServer := http.FileServer(http.Dir("public/dist"))
+	chiRouter.Handle("/*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Path
+
+		if strings.Contains(path, ".") {
+			fileServer.ServeHTTP(w, r)
+			return
+		}
+
+		
 		http.ServeFile(w, r, "public/dist/index.html")
-	})
+	}))
+
 
 	httpServer := &http.Server{
 		Handler: chiRouter,
