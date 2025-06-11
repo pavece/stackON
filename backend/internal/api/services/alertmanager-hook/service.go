@@ -67,7 +67,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["job"])
+	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["severity"])
 	instructionSet := convertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
 	if alertPayload.Status != "resolve" {
@@ -101,8 +101,8 @@ func validateMQTTGroup(alertPayload MQTTAlertGroup) error {
 		return errors.New(errorsDesc)
 	}
 
-	if alertPayload.CommonLabels["alertname"] == "" || alertPayload.CommonLabels["instance"] == "" || alertPayload.CommonLabels["job"] == "" {
-		return errors.New("please include alertname, instance and job in the commonLabels field")
+	if alertPayload.CommonLabels["alertname"] == "" || alertPayload.CommonLabels["instance"] == "" || alertPayload.CommonLabels["severity"] == "" {
+		return errors.New("please include alertname, instance and severity in the commonLabels field")
 	}
 
 	return nil
