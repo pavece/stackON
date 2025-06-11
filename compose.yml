@@ -1,17 +1,17 @@
 version: "3.8"
 services:
-  mongodb:
-    image: mongo:7-jammy
-    container_name: mongodb
-    ports:
-      - "27018:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    volumes:
-      - ./mongo-data:/data/db
-    networks:
-      - backend
+  # mongodb:
+  #   image: mongo:7-jammy
+  #   container_name: mongodb
+  #   ports:
+  #     - "27018:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: root
+  #   volumes:
+  #     - ./mongo-data:/data/db
+  #   networks:
+  #     - backend
   mosquitto:
     image: eclipse-mosquitto
     ports:
@@ -20,16 +20,16 @@ services:
       - ./mosquitto_config:/mosquitto/config:rw
     networks:
       - backend
-  backend:
-    image: stack-on:1.0
-    environment:
-      PORT: 3000
-      MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017
-      MQTT_BROKER_URL: tcp://mosquitto:1883
-    networks:
-      - backend
-    ports:
-      - 8080:3000
+  # backend:
+  #   image: stack-on:1.0
+  #   environment:
+  #     PORT: 3000
+  #     MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017
+  #     MQTT_BROKER_URL: tcp://mosquitto:1883
+  #   networks:
+  #     - backend
+  #   ports:
+  #     - 8080:3000
 
 networks:
   backend:
