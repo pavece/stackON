@@ -70,12 +70,10 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["severity"])
 	instructionSet := convertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
-	if alertPayload.Status != "resolve" {
-		//Error will be ignored as it's not critical
-		svc.eventRepo.CreateEvent(&event.Event{FiredAt: time.Now(), EventId: eventId, WebhookId: webhook.Id})
-		
-		//TODO: Count fire event with prometheus
-	} 
+	
+	svc.eventRepo.CreateEvent(&event.Event{FiredAt: time.Now(), EventId: eventId, WebhookId: webhook.Id, Status: alertPayload.Status})
+	
+	//TODO: Count fire event with prometheus	 
 
 	mqttResponse := MQTTResponse{EventId: eventId, HandleType: webhook.Type, Instructions: instructionSet, Status: alertPayload.Status}
 	marshallReponse, err := json.Marshal(mqttResponse)

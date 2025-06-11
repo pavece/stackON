@@ -11,4 +11,5 @@ type Event struct {
 	FiredAt   time.Time          `bson:"firedAt" json:"firedAt"`
 	EventId   string			 `bson:"eventId" json:"eventId"`
 	WebhookId primitive.ObjectID `bson:"webhookId" json:"webhookId"`
+	Status 	  string `bson:"status" json:"status"`
 }
