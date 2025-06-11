@@ -21,13 +21,13 @@ export const MainPage = () => {
 				title='Latch hooks'
 				description='Once fired the instructions on these hooks will keep running until a resolve event is recieved.'
 				typeKey='latch'
-				webhooks={data!.data.filter(w => w.type == 'latch')}
+				webhooks={(data?.data || []).filter(w => w.type == 'latch')}
 			/>
 			<WebhooksContainerSection
 				title='Once hooks'
 				description='These hooks will execute the instruction set only once. They dont require a resolve event.'
 				typeKey='once'
-				webhooks={data!.data.filter(w => w.type == 'once')}
+				webhooks={(data?.data || []).filter(w => w.type == 'once')}
 			/>
 		</div>
 	);
