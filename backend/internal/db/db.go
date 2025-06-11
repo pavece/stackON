@@ -17,12 +17,16 @@ func Start(dbUrl string) {
 	defer cancel()
 
 	var err error
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI(dbUrl))
-	if err != nil {
-		log.Fatal(err)
-	}
+    client, err = mongo.Connect(ctx, options.Client().ApplyURI(dbUrl))
+    if err != nil {
+        log.Fatal("[ERROR] Failed to create MongoDB client:", err)
+    }
 
-	fmt.Println("[INFO] Connected to mongo DB")
+    if err = client.Ping(ctx, nil); err != nil {
+        log.Fatal("[ERROR] Failed to connect to MongoDB:", err)
+    } else {
+		fmt.Println("[INFO] Connected to database")
+	}
 }
 
 func GetClient() *mongo.Client{

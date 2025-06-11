@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	mqttclient "github.com/pavece/stackON/internal/mqtt"
 )
 
+var embeddedFiles embed.FS
 
 func main() {
 
@@ -24,7 +26,7 @@ func main() {
 	mqttBrokerUrl := os.Getenv("MQTT_BROKER_URL")
 
 	if port == "" {
-		port = "3000"
+		port = "8080"
 	}
 
 	if dbConUrl == "" {
@@ -34,6 +36,7 @@ func main() {
 	if mqttBrokerUrl == "" {
 		log.Fatal("[ERROR] MQTT broker url must be defined in env variables")
 	}
+
 
 	//Setup mongo db
 	db.Start(dbConUrl)
@@ -52,7 +55,12 @@ func main() {
 		MaxAge:           300,               
 	}))
 
+	//Serve	public path (for the frontend)
 	routes.MountRoutes(chiRouter)
+	chiRouter.Handle("/*", http.FileServer(http.Dir("public/dist")))
+	chiRouter.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "public/dist/index.html")
+	})
 
 	httpServer := &http.Server{
 		Handler: chiRouter,
