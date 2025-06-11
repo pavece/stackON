@@ -2,14 +2,14 @@ import { DataTable } from '@/components/fired-events-page/data-table';
 import { columns } from '../components/fired-events-page/columns';
 import { useQuery } from '@tanstack/react-query';
 import { fetchEvents } from '@/api/api-client';
-import { Loader } from 'lucide-react';
 import { Error } from '@/components/ui/error';
+import { Loading } from '@/components/ui/loading';
 
 export const FiredEventsPage = () => {
 	const { isLoading, isError, data: { data: events } = {} } = useQuery({ queryKey: ['events'], queryFn: fetchEvents });
 
 	if (isLoading) {
-		return <Loader />;
+		return <Loading />;
 	}
 
 	if (isError) {
