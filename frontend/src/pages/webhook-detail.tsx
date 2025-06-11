@@ -84,7 +84,7 @@ export const WebhookDetailPage = () => {
 				<CallUrl
 					title='Prometheus Alertmanager'
 					description='Requires an alertmanager valid payload, will read first level group info.'
-					url={(import.meta.env.VITE_PUBLIC_API_URL || 'http://localhost:8080') + `/hook/am/${id}`}
+					url={(import.meta.env.VITE_PUBLIC_HOST || 'http://BACKEND_HOST') + `/hook/am/${id}`}
 					method='POST'
 				/>
 			</div>

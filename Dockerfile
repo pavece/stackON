@@ -1,8 +1,9 @@
 FROM node:alpine AS frontend-builder
 
+ENV VITE_PUBLIC_BACKEND_URL=""
+ENV VITE_PUBLIC_HOST="http://<HOSTNAME>"
 WORKDIR /frontend
 COPY ./frontend .
-ENV VITE_PUBLIC_BACKEND_URL=""
 RUN npm install
 RUN npm run build
 
