@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"strings"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -122,7 +123,7 @@ func convertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webho
 			return instructionSet
 		}
 
-		instructionSet = append(instructionSet, instruction.Data.Instruction)
+		instructionSet = append(instructionSet, strings.ToUpper(instruction.Data.Instruction))
 		currentNode = edges[currentEdgeIdx].Target
 
 		edges = slices.Delete(edges, currentEdgeIdx, currentEdgeIdx + 1)	
@@ -133,7 +134,7 @@ func convertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webho
 				return instructionSet
 			}
 
-			instructionSet = append(instructionSet, instruction.Data.Instruction)
+			instructionSet = append(instructionSet, strings.ToUpper(instruction.Data.Instruction))
 		}
 	}
 
