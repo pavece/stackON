@@ -80,8 +80,8 @@ export const EditWebhookPage = () => {
 				<p className='text-muted-foreground'>Fill all the fields to create a new webhook.</p>
 			</div>
 
-			<div className='grid  grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-10 mt-10 h-[70vh] gap-4'>
-				<div className='col-span-1 md:col-span-4 lg:col-span-3'>
+			<div className='grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-10 mt-10 md:h-[70vh] gap-4'>
+				<div className='col-span-1 md:col-span-4 lg:col-span-3 order-2 md:order-1'>
 					<WebhookForm
 						onSubmit={onSubmit}
 						initialValues={webhook}
@@ -90,12 +90,12 @@ export const EditWebhookPage = () => {
 						isCreation={false}
 					/>
 				</div>
-				<div className='col-span-1 md:col-span-6 lg:col-span-7'>
+				<div className='col-span-1 md:col-span-6 lg:col-span-7 order-1 md:order-2'>
 					<span className='font-medium'>Instructions</span>
-					<div className='rounded-lg border w-full h-full'>
+					<div className='rounded-lg border w-full h-[95%]'>
 						<DiagramEditor />
 					</div>
-					<p className='mt-2 text-muted-foreground italic'>
+					<p className='mt-2 text-muted-foreground italic hidden md:block'>
 						If you're creating a latch hook, this instruction set will run indefinitely until a resolve event is
 						received.
 					</p>
