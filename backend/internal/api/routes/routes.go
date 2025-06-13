@@ -23,11 +23,11 @@ func MountRoutes(router *chi.Mux) {
 	webhooksRouter.Put("/{id}", webhooksController.UpdateWebhookController)
 
 	//Fired event history
-	eventService := eventsservice.New(&event.MongoEventRepo{Client: db.GetClient()})
+	eventsController := eventsservice.NewController()
 	eventRouter := chi.NewRouter()
 
-	eventRouter.Get("/", eventService.GetEvents)
-	eventRouter.Get("/hook/{id}", eventService.GetEventsByHook)
+	eventRouter.Get("/", eventsController.GetEventsController)
+	eventRouter.Get("/hook/{id}", eventsController.GetEventsByHookController)
 
 	//Hooks
 	hookRouter := chi.NewRouter()
