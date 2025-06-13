@@ -1,11 +1,12 @@
 import { deleteWebhook, fetchWebhook } from '@/api/api-client';
+import { testWebhook } from '@/api/test-webhook';
 import { Button } from '@/components/ui/button';
 import { DestructiveActionDialog } from '@/components/ui/destructive-action';
 import { Error } from '@/components/ui/error';
 import { Loading } from '@/components/ui/loading';
 import { CallUrl } from '@/components/webhook-detail/call-url';
 import { useQuery } from '@tanstack/react-query';
-import { Folder, Pen, Shapes, Trash } from 'lucide-react';
+import { Folder, Pen, Shapes, TestTube2, Trash } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -39,6 +40,16 @@ export const WebhookDetailPage = () => {
 			navigate('/');
 		} catch {
 			toast.error('Failed to delete webhook');
+		}
+	};
+
+	const onTestWebhook = async () => {
+		try {
+			await testWebhook(id);
+
+			toast.success('Webhook test OK');
+		} catch {
+			toast.error('Webhook test failed');
 		}
 	};
 
@@ -77,10 +88,15 @@ export const WebhookDetailPage = () => {
 				</div>
 			</div>
 
-			<hr className='my-5' />
-
-			<div>
-				<h1 className='text-2xl font-semibold'>URLS</h1>
+			<div className='mt-10'>
+				<div className='flex justify-between'>
+					<h1 className='text-2xl font-semibold'>URLS</h1>
+					<div>
+						<Button disabled={hook?.type == 'latch'} variant={'secondary'} onClick={onTestWebhook}>
+							<TestTube2 /> Test webhook
+						</Button>
+					</div>
+				</div>
 				<CallUrl
 					title='Prometheus Alertmanager'
 					description='Requires an alertmanager valid payload, will read first level group info.'

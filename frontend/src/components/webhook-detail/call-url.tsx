@@ -31,7 +31,7 @@ export const CallUrl = ({ title, description, method, url }: Props) => {
 					</div>
 				</div>
 
-				<Button className='font-sans' onClick={copyURL}>
+				<Button className='font-sans' onClick={copyURL} variant={'ghost'}>
 					{copied ? <Check /> : <Copy />} Copy
 				</Button>
 			</div>
