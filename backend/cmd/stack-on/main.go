@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,8 +14,6 @@ import (
 	"github.com/pavece/stackON/internal/db"
 	mqttclient "github.com/pavece/stackON/internal/mqtt"
 )
-
-var embeddedFiles embed.FS
 
 func main() {
 

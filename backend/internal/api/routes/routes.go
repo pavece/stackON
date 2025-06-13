@@ -13,14 +13,14 @@ import (
 
 func MountRoutes(router *chi.Mux) {
 	//Webhook management
-	webhookService := webhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()})
+	webhooksController := webhookservice.NewController()
 	webhooksRouter := chi.NewRouter()
 
-	webhooksRouter.Get("/", webhookService.GetWebhooks)
-	webhooksRouter.Get("/{id}", webhookService.GetWebhookById)
-	webhooksRouter.Delete("/{id}", webhookService.DeleteWebhook)
-	webhooksRouter.Post("/", webhookService.CreateWebhook)
-	webhooksRouter.Put("/{id}", webhookService.UpdateWebhook)
+	webhooksRouter.Get("/", webhooksController.GetWebhooksController)
+	webhooksRouter.Get("/{id}", webhooksController.GetWebhookByIdController)
+	webhooksRouter.Delete("/{id}", webhooksController.DeleteWebhookController)
+	webhooksRouter.Post("/", webhooksController.CreateWebhookController)
+	webhooksRouter.Put("/{id}", webhooksController.UpdateWebhookController)
 
 	//Fired event history
 	eventService := eventsservice.New(&event.MongoEventRepo{Client: db.GetClient()})
