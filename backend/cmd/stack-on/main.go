@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -12,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/pavece/stackON/internal/api/routes"
 	"github.com/pavece/stackON/internal/db"
+	"github.com/pavece/stackON/internal/mcp"
 	mqttclient "github.com/pavece/stackON/internal/mqtt"
 )
 
@@ -22,6 +24,12 @@ func main() {
 	port := os.Getenv("PORT")
 	dbConUrl := os.Getenv("MONGO_CONNECTION_URL")
 	mqttBrokerUrl := os.Getenv("MQTT_BROKER_URL")
+	mcpPort := os.Getenv("MCP_PORT")
+	convertedMcpEnabled, err := strconv.ParseBool(os.Getenv("MCP_ENABLED"))
+	mcpEnabled := false
+	if err == nil {
+		mcpEnabled = convertedMcpEnabled
+	}
 
 	if port == "" {
 		port = "8080"
@@ -41,6 +49,11 @@ func main() {
 
 	//Setup mqtt
 	mqttclient.InitClient(mqttBrokerUrl)
+
+	//Setup MCP server
+	if(mcpEnabled && mcpPort != ""){
+		go mcp.StartMCPServer(mcpPort)
+	}
 
 	//Setup http server + chi
 	chiRouter := chi.NewRouter()
@@ -69,15 +82,14 @@ func main() {
 		http.ServeFile(w, r, "public/dist/index.html")
 	}))
 
-
 	httpServer := &http.Server{
 		Handler: chiRouter,
 		Addr: ":"+port,
 	}
 
-	fmt.Println("[INFO] Server running on port " + port)
+	fmt.Println("[INFO] Starting HTTP server on  " + port)
 
-	err := httpServer.ListenAndServe()
+	err = httpServer.ListenAndServe()
 	if err != nil {
 		log.Fatal("[ERROR] HTTP server error", err)
 	}
