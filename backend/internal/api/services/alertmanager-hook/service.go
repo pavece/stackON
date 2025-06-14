@@ -69,7 +69,7 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	eventId := fmt.Sprintf("%s:%s:%s", alertPayload.CommonLabels["alertname"], alertPayload.CommonLabels["instance"], alertPayload.CommonLabels["severity"])
-	instructionSet := convertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
+	instructionSet := ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
 	
 	svc.eventRepo.CreateEvent(&event.Event{FiredAt: time.Now(), EventId: eventId, WebhookId: webhook.Id, Status: alertPayload.Status})
@@ -107,7 +107,7 @@ func validateMQTTGroup(alertPayload MQTTAlertGroup) error {
 	return nil
 }
 
-func convertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webhook.InstructionConnection) []string{
+func ConvertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webhook.InstructionConnection) []string{
 	instructionSet := make([]string, 0, 10)
 
 	currentNode := nodes[0].Id
