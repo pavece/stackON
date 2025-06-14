@@ -3,11 +3,9 @@ import { NavBar } from './components/navbar';
 
 function App() {
 	return (
-		<main className='flex w-full items-start justify-center'>
-			<div className='flex w-full max-w-[1440px] flex-col items-start justify-start p-5'>
-				<NavBar />
-				<HeroSection />
-			</div>
+		<main className='flex w-full flex-col items-center justify-center overflow-x-hidden p-5'>
+			<NavBar />
+			<HeroSection />
 		</main>
 	);
 }
