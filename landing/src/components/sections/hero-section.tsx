@@ -37,7 +37,7 @@ export const HeroSection = () => {
 			0.5
 		);
 
-		tl.to('.hero-image', { opacity: 1, duration: 1, filter: 'blur(0px)' });
+		tl.to('.hero-image', { opacity: 1, duration: 1, filter: 'blur(0px)' }, '<');
 	});
 
 	return (
