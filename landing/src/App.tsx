@@ -1,6 +1,7 @@
 import { HeroSection } from './components/sections/hero-section';
 import { NavBar } from './components/navbar';
 import { HowItWorksSection } from './components/sections/how-section';
+import { FeaturesSection } from './components/sections/features-section';
 
 function App() {
 	return (
@@ -8,6 +9,7 @@ function App() {
 			<NavBar />
 			<HeroSection />
 			<HowItWorksSection />
+			<FeaturesSection />
 		</main>
 	);
 }

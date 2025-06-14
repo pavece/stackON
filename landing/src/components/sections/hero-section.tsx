@@ -8,7 +8,7 @@ export const HeroSection = () => {
 				<h1 className='max-w-[1000px] text-4xl font-semibold text-white sm:text-5xl md:text-6xl'>
 					Forward alerts to physical devices through MQTT
 				</h1>
-				<p className='mt-4 max-w-[800px] text-base text-zinc-400 sm:text-lg'>
+				<p className='mt-4 max-w-[800px] text-base text-zinc-500 sm:text-lg'>
 					A new way of knowing the status of your homelab. Create a webhook, define the instructions and connect MQTT
 					clients such as ESP32.
 				</p>

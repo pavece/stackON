@@ -2,8 +2,8 @@ export const HowItWorksSection = () => {
 	return (
 		<section className='mb-20 flex max-w-[1440px] flex-col items-start justify-center'>
 			<div>
-				<h1 className='m text-4xl font-semibold'>How does it work ?</h1>
-				<p className='text-md text-zinc-500'>
+				<h1 className='text-2xl font-semibold md:text-4xl'>How does it work ?</h1>
+				<p className='text-md mt-2 text-zinc-500'>
 					StackON requires an existing monitoring and alerting infrastructure in order to work properly.
 				</p>
 			</div>
