@@ -27,7 +27,7 @@ type HookService struct {
 type MQTTResponse struct {
 	EventId string `json:"eventId"`
 	HandleType string `json:"handleType"`
-	Instructions []string `json:"instructions"`//TODO: Define the instructions type
+	Instructions []string `json:"instructions"`
 	Status string `json:"status"`
 }
 
@@ -73,8 +73,6 @@ func (svc *HookService) ForwardEvent(w http.ResponseWriter, r *http.Request){
 
 	
 	svc.eventRepo.CreateEvent(&event.Event{FiredAt: time.Now(), EventId: eventId, WebhookId: webhook.Id, Status: alertPayload.Status})
-	
-	//TODO: Count fire event with prometheus	 
 
 	mqttResponse := MQTTResponse{EventId: eventId, HandleType: webhook.Type, Instructions: instructionSet, Status: alertPayload.Status}
 	marshallReponse, err := json.Marshal(mqttResponse)
@@ -108,6 +106,10 @@ func validateMQTTGroup(alertPayload MQTTAlertGroup) error {
 }
 
 func ConvertNodesToInstructionSet(nodes []webhook.InstructionNode, edges []webhook.InstructionConnection) []string{
+	if (len(nodes) == 0 || len(edges) == 0){
+		return []string{"NO INSTRUCTIONS"}
+	}
+
 	instructionSet := make([]string, 0, 10)
 
 	currentNode := nodes[0].Id

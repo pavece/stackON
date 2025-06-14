@@ -1,4 +1,4 @@
-package mcp
+package mcpserver
 
 import (
 	"fmt"
@@ -13,10 +13,6 @@ func StartMCPServer(port string) {
         server.WithToolCapabilities(true),
     )
 	
-	// s.AddTool(mcp.NewTool("hello_mcp", mcp.WithDescription("Get greetings from the MCP server")), func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// 	return mcp.NewToolResultText("Hello MCP"), nil
-	// })
-
 	tools := NewTools()
 
 	//Webhook tools
@@ -28,6 +24,11 @@ func StartMCPServer(port string) {
 		mcp.WithDescription("Get detailed information from a webhook by specifying the id"), 
 		mcp.WithString("webhookId", mcp.Required(), mcp.Description("ID from the webhook you want to retrieve"))),
 	tools.getWebhookById)
+
+	s.AddTool(mcp.NewTool("delete-webhook", 
+		mcp.WithDescription("Remove a webhook by specifying the id"), 
+		mcp.WithString("webhookId", mcp.Required(), mcp.Description("ID from the webhook you want to remove"))),
+	tools.deleteWebhook)
 
 	//Event tools
 	s.AddTool(mcp.NewTool("get-events", 

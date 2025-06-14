@@ -1,4 +1,4 @@
-package mcp
+package mcpserver
 
 import (
 	"context"
@@ -79,6 +79,29 @@ func (tools *MCPTools) getWebhookById(ctx context.Context, request mcp.CallToolR
 
 	return mcp.NewToolResultText(string(jsonData)), nil
 }
+
+func (tools *MCPTools) deleteWebhook(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	webhookId, err := request.RequireString("webhookId")
+	if err != nil {
+		return mcp.NewToolResultError("Webhook ID not included"), nil
+	}
+	
+	webhook, err := tools.webhookService.DeleteWebhook(webhookId)
+	if err != nil {
+		return mcp.NewToolResultError("Failed to delete webhook"), nil
+	}
+
+	responseWebhok := DetailedWebhookResponse{Id: webhook.Id, Title: webhook.Title, Description: webhook.Description, Type: webhook.Type, Topic: webhook.Topic, CreatedAt: webhook.CreatedAt}
+	responseWebhok.Instructions = alertmanagerhookservice.ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
+
+	jsonData, err := json.Marshal(responseWebhok)
+	if err != nil {
+		return mcp.NewToolResultError("Failed to marshall JSON response"), nil
+	}
+
+	return mcp.NewToolResultText(string(jsonData)), nil
+}
+
 
 func (tools *MCPTools) getEvents(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	events, err := tools.eventsService.GetEvents()

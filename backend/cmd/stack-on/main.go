@@ -13,7 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/pavece/stackON/internal/api/routes"
 	"github.com/pavece/stackON/internal/db"
-	"github.com/pavece/stackON/internal/mcp"
+	"github.com/pavece/stackON/internal/mcpserver"
 	mqttclient "github.com/pavece/stackON/internal/mqtt"
 )
 
@@ -52,7 +52,7 @@ func main() {
 
 	//Setup MCP server
 	if(mcpEnabled && mcpPort != ""){
-		go mcp.StartMCPServer(mcpPort)
+		go mcpserver.StartMCPServer(mcpPort)
 	}
 
 	//Setup http server + chi
