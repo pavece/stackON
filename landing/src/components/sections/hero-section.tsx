@@ -1,9 +1,9 @@
 import { Github } from 'lucide-react';
-import { Button } from './button';
+import { Button } from '../button';
 
 export const HeroSection = () => {
 	return (
-		<section className='relative mt-16 flex min-h-[110vh] w-full flex-col items-center justify-start'>
+		<section className='relative mt-16 flex w-full flex-col items-center justify-start'>
 			<div className='w-full max-w-[1440px] items-center'>
 				<h1 className='max-w-[1000px] text-4xl font-semibold text-white sm:text-5xl md:text-6xl'>
 					Forward alerts to physical devices through MQTT
