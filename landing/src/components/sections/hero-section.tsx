@@ -13,7 +13,9 @@ export const HeroSection = () => {
 					clients such as ESP32.
 				</p>
 				<Button className='mt-6'>
-					<Github /> GitHub
+					<a href='https://github.com/pavece/stackON' className='flex items-center gap-2'>
+						<Github /> GitHub
+					</a>
 				</Button>
 			</div>
 

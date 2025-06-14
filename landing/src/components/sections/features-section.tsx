@@ -22,11 +22,11 @@ const BentoCard = ({ title, subtitle, className, icon }: BentoCardProps) => {
 
 export const FeaturesSection = () => {
 	return (
-		<section className='mx-auto mb-20 flex w-full max-w-[1440px] flex-col items-start justify-start px-4'>
+		<section className='mx-auto mt-10 mb-20 flex w-full max-w-[1440px] flex-col items-start justify-start px-4'>
 			<h1 className='text-2xl font-semibold md:text-4xl'>Features</h1>
 			<p className='text-md mt-2 text-zinc-500'>StackON comes with some interesting features...</p>
 
-			<div className='mt-5 grid h-[1000px] w-full grid-cols-1 grid-rows-3 gap-4 md:h-[700px] md:grid-cols-6 md:grid-rows-2'>
+			<div className='mt-10 grid h-[1000px] w-full grid-cols-1 grid-rows-3 gap-4 md:h-[700px] md:grid-cols-6 md:grid-rows-2'>
 				<BentoCard
 					icon={<GitBranch />}
 					className="bg-[url('/images/bento-instructions.svg')] bg-cover bg-center bg-no-repeat md:col-span-3 md:row-span-2"
