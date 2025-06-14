@@ -32,7 +32,7 @@ func MountRoutes(router *chi.Mux) {
 	//Hooks
 	hookRouter := chi.NewRouter()
 
-	//Prometheus alert manager specific
+	//Prometheus alert manager specific (controller is service not intended to be called in any other way that's not an HTTP request)
 	amHookService := alertmanagerhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client, &event.MongoEventRepo{Client: db.GetClient()})
 	hookRouter.Post("/am/{id}", amHookService.ForwardEvent)
 

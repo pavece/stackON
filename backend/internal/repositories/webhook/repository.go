@@ -43,6 +43,16 @@ type Webhook struct {
 	InstructionConnections []InstructionConnection `bson:"instructionConnections" json:"instructionConnections" validate:"required,dive"`
 	CreatedAt              time.Time              `bson:"createdAt,omitempty" json:"createdAt"`
 }
+
+type WebhookReduced struct {
+	Id                     primitive.ObjectID     `bson:"_id,omitempty" json:"id"`
+	Title				   string				  `bson:"title" json:"title" validate:"required"`
+	Description			   string				  `bson:"description" json:"description" validate:"required"`
+	Type                   string                 `bson:"type" json:"type" validate:"required"`
+	Topic                  string                 `bson:"topic" json:"topic" validate:"required"`
+	CreatedAt              time.Time              `bson:"createdAt,omitempty" json:"createdAt"`
+}
+
 type WebhookRepository interface {
 	GetWebhookById(id string) (*Webhook, error)
 	GetWebhooks() ([]Webhook, error)

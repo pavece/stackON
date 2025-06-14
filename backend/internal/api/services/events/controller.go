@@ -3,7 +3,7 @@ package eventsservice
 import (
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/pavece/stackON/internal/api"
 	"github.com/pavece/stackON/internal/db"
 	"github.com/pavece/stackON/internal/repositories/event"
@@ -35,7 +35,7 @@ func (cont *EventsController) GetEventsController(w http.ResponseWriter, r *http
 
 func (cont *EventsController) GetEventsByHookController(w http.ResponseWriter, r *http.Request) {
 	hookId := chi.URLParam(r, "id")
-	
+
 	events, err := cont.service.GetEventsByHook(hookId)
 	if err == mongo.ErrNoDocuments {
 		api.SendJson(w, 200, []interface{}{})

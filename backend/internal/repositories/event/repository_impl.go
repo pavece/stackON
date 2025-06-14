@@ -41,7 +41,7 @@ func (repo *MongoEventRepo) GetFiredEventsByWebhook(webhookId string) ([]Event, 
 		return nil, err
 	}
 
-	cursor, err := repo.Client.Database("stackON").Collection("events").Find(context.Background(), bson.M{"_id": objId})
+	cursor, err := repo.Client.Database("stackON").Collection("events").Find(context.Background(), bson.M{"webhookId": objId})
 	if err != nil {
 		return nil, err
 	}
