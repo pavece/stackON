@@ -13,7 +13,7 @@ interface BentoCardProps {
 const BentoCard = ({ title, subtitle, className, icon }: BentoCardProps) => {
 	return (
 		<article
-			className={`${className} bento-card relative col-span-1 row-span-1 rounded-md bg-[#232323] opacity-0 blur-md`}
+			className={`${className} bento-card relative col-span-1 row-span-1 rounded-md border border-2 border-zinc-800 bg-[#232323] opacity-0 blur-md`}
 		>
 			<div className='absolute top-4 right-4 rounded-full bg-[#18181896] p-3 backdrop-blur-lg'>{icon}</div>
 			<div className='absolute bottom-4 left-4'>
