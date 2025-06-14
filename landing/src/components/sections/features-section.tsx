@@ -1,3 +1,5 @@
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 import { BotMessageSquare, GitBranch, Table } from 'lucide-react';
 import type React from 'react';
 
@@ -10,7 +12,9 @@ interface BentoCardProps {
 
 const BentoCard = ({ title, subtitle, className, icon }: BentoCardProps) => {
 	return (
-		<article className={`${className} relative col-span-1 row-span-1 rounded-md bg-[#232323]`}>
+		<article
+			className={`${className} bento-card relative col-span-1 row-span-1 rounded-md bg-[#232323] opacity-0 blur-md`}
+		>
 			<div className='absolute top-4 right-4 rounded-full bg-[#18181896] p-3 backdrop-blur-lg'>{icon}</div>
 			<div className='absolute bottom-4 left-4'>
 				<h2 className='text-lg font-medium text-white lg:text-xl'>{title}</h2>
@@ -21,8 +25,23 @@ const BentoCard = ({ title, subtitle, className, icon }: BentoCardProps) => {
 };
 
 export const FeaturesSection = () => {
+	useGSAP(() => {
+		gsap.to('.bento-card', {
+			scrollTrigger: {
+				scrub: 1,
+				trigger: '.features-section',
+				start: 'top bottom',
+				end: '+=800px',
+			},
+			opacity: 1,
+			duration: 1,
+			filter: 'blur(0px)',
+			stagger: 0.2,
+		});
+	});
+
 	return (
-		<section className='mx-auto mt-10 mb-20 flex w-full max-w-[1440px] flex-col items-start justify-start px-4'>
+		<section className='features-section mx-auto mt-10 mb-20 flex w-full max-w-[1440px] flex-col items-start justify-start px-4'>
 			<h1 className='text-2xl font-semibold md:text-4xl'>Features</h1>
 			<p className='text-md mt-2 text-zinc-500'>StackON comes with some interesting features...</p>
 
