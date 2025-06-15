@@ -23,7 +23,7 @@ export const FiredEventsPage = () => {
 				<p>History of the events fired using each webhook.</p>
 			</div>
 
-			<DataTable columns={columns} data={events || []} />
+			<DataTable columns={columns} data={events?.reverse() || []} />
 		</div>
 	);
 };
