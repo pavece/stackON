@@ -1,5 +1,23 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: stack-on:test
+    environment:
+      PORT: 3000
+      MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017
+      MQTT_BROKER_URL: tcp://mosquitto:1883
+      MCP_PORT: 3001
+      MCP_ENABLED: true
+    networks:
+      - backend
+    ports:
+      - 8080:3000
+      - 8081:3001
+
+  # Prerequisites
   mongodb:
     image: mongo:7-jammy
     container_name: mongodb
@@ -12,6 +30,12 @@ services:
       - ./mongo-data:/data/db
     networks:
       - backend
+
+  # Allow anonymous access to mosquitto (for testing)
+  # Place these lines in the mosquitto.conf file
+
+  # allow_anonymous true
+  # listener 1883
   mosquitto:
     image: eclipse-mosquitto
     ports:
@@ -20,18 +44,5 @@ services:
       - ./mosquitto_config:/mosquitto/config:rw
     networks:
       - backend
-  backend:
-    image: stack-on:test
-    environment:
-      PORT: 3000
-      MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017
-      MQTT_BROKER_URL: tcp://mosquitto:1883
-      MCP_PORT: 3001 # MCP server endpoint = /mcp
-      MCP_ENABLED: true
-    networks:
-      - backend
-    ports:
-      - 8080:3000
-      - 8081:3001
 networks:
   backend:
