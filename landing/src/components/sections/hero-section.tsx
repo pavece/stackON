@@ -1,4 +1,4 @@
-import { Github } from 'lucide-react';
+import { Github, Info } from 'lucide-react';
 import { Button } from '../button';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -38,11 +38,19 @@ export const HeroSection = () => {
 		);
 
 		tl.to('.hero-image', { opacity: 1, duration: 1, filter: 'blur(0px)' }, '<');
+
+		tl.to('.hero-disclaimer', { opacity: 1, duration: 1 });
 	});
 
 	return (
 		<section className='relative mt-16 flex w-full flex-col items-center justify-start'>
 			<div className='w-full max-w-[1440px] items-center'>
+				<div className='hero-disclaimer mb-5 flex w-fit items-center gap-2 rounded-full border border-yellow-600 px-4 py-2 text-sm text-yellow-600 opacity-0'>
+					<Info className='w-5' /> StackON is a toy project:
+					<a href='https://github.com/pavece/stackON?tab=readme-ov-file#what-is-stackon' className='underline'>
+						more info
+					</a>
+				</div>
 				<h1 className='hero-header max-w-[1000px] text-4xl font-semibold text-white sm:text-5xl md:text-6xl'>
 					Forward Alerts to Physical Devices via MQTT
 				</h1>

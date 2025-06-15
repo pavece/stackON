@@ -55,11 +55,17 @@ export const HowItWorksSection = () => {
 					<h3 className='text-2xl font-medium'>2. Connect to Alertmanager</h3>
 					<p className='mt-2 max-w-[1000px] text-zinc-500'>
 						Add your StackON webhooks to your Alertmanager configuration. Use proper grouping and label matching to
-						ensure accurate alert routing. Refer to the README for examples and best practices.
+						ensure accurate alert routing. You can see a configuration example{' '}
+						<a
+							className='font-medium underline'
+							href='https://github.com/pavece/stackON?tab=readme-ov-file#recommended-configuration'
+						>
+							here
+						</a>
 					</p>
 				</article>
 				<article className='step translate-x-[100px] rounded-md bg-[#232323] p-4 opacity-0'>
-					<h3 className='text-2xl font-medium'>3. Connect Yoour MQTT Clients</h3>
+					<h3 className='text-2xl font-medium'>3. Connect Your MQTT Clients</h3>
 					<p className='mt-2 max-w-[1000px] text-zinc-500'>
 						Connect devices like ESP32 to your MQTT broker and start listening for alerts. Use the provided example
 						client to build an Andon-style beacon, or create your own custom implementation tailored to your hardware
