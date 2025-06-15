@@ -168,3 +168,13 @@ You can view the source code for my ESP32 andon / stack beacon implementation
 [ESP32 StackON Client](https://github.com/pavece/stackON/tree/main/beacon-clients/esp32).
 
 It’s a basic starting point — feel free to build your own version to suit your needs.
+
+### The MCP server
+
+StackON includes a very simple MCP server that allows webhook and event history information retrieval. If you want to use it include the MCP_PORT and ENABLE_MCP variables as shown in the compose example.
+
+Then you can add the MCP server into tools like Claude desktop or VsCode Copilot chat using this url:
+
+```txt
+ http://<host>:<mcp-port>/mcp
+```
