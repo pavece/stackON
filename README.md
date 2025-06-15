@@ -113,9 +113,9 @@ global:
 route:
   receiver: so-default-receiver
   group_by: ['...']
-  group_interval: 1m
-  repeat_interval: 1h #Important, specially for latch hooks
   group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1h
   routes:
     - match:
         severity: warning
@@ -124,20 +124,22 @@ route:
     - match:
         severity: error
       receiver: so-error-webhook
+
 receivers:
   - name: so-warning-webhook
     webhook_configs:
       - url: 'WARNING WEBHOOK URL'
         send_resolved: true
+
   - name: so-error-webhook
     webhook_configs:
       - url: 'ERROR WEBHOOK URL'
-      send_resolved: true
+        send_resolved: true
 
   - name: so-default-receiver
     webhook_configs:
       - url: 'DEFAULT WEBHOOK URL'
-      send_resolved: true
+        send_resolved: true
 ```
 
 You can use this sample alertmanager configuration. As you can see it will route alerts to different webhooks based on severity. **Remember to include send_resolved if you want to use latch hooks.**
