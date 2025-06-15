@@ -32,9 +32,9 @@ export const HowItWorksSection = () => {
 	return (
 		<section className='howto-section mb-20 flex max-w-[1440px] flex-col items-start justify-center'>
 			<div>
-				<h1 className='text-2xl font-semibold md:text-4xl'>How does it work ?</h1>
+				<h1 className='text-2xl font-semibold md:text-4xl'>How It Works</h1>
 				<p className='text-md mt-2 text-zinc-500'>
-					StackON requires an existing monitoring and alerting infrastructure in order to work properly.
+					StackON connects your monitoring stack to physical devices via MQTT. Just plug in your Alertmanager and go.
 				</p>
 			</div>
 			<img
@@ -44,25 +44,26 @@ export const HowItWorksSection = () => {
 			/>
 			<div className='mt-14 flex w-full flex-col items-center gap-6'>
 				<article className='step translate-x-[100px] rounded-md bg-[#232323] p-4 opacity-0'>
-					<h3 className='text-2xl font-medium'>1. Create stackON webhooks</h3>
+					<h3 className='text-2xl font-medium'>1. Create StackON Webhooks</h3>
 					<p className='mt-2 max-w-[1000px] text-zinc-500'>
-						Define webhooks for different severity levels or destinations. Design a simple workflow of actions that will
-						be sent over MQTT to your end clients.
+						Define webhooks for different alert severities or device groups. Design simple workflows of custom
+						instructions, like turning on a red light or triggering a buzzer. That will be sent over MQTT to your
+						devices.
 					</p>
 				</article>
 				<article className='step translate-x-[100px] rounded-md bg-[#232323] p-4 opacity-0'>
-					<h3 className='text-2xl font-medium'>2. Include your webhooks in prometheus alertmanager</h3>
+					<h3 className='text-2xl font-medium'>2. Connect to Alertmanager</h3>
 					<p className='mt-2 max-w-[1000px] text-zinc-500'>
-						Once defined you need to include those webhooks in alertmanager configuration. Make sure to use correct
-						grouping and matching to achieve good results. Check the readme section for more info.
+						Add your StackON webhooks to your Alertmanager configuration. Use proper grouping and label matching to
+						ensure accurate alert routing. Refer to the README for examples and best practices.
 					</p>
 				</article>
 				<article className='step translate-x-[100px] rounded-md bg-[#232323] p-4 opacity-0'>
-					<h3 className='text-2xl font-medium'>3. Connect MQTT clients</h3>
+					<h3 className='text-2xl font-medium'>3. Connect Yoour MQTT Clients</h3>
 					<p className='mt-2 max-w-[1000px] text-zinc-500'>
-						Now you can connect MQTT clients to mosquitto broker and start listening those MQTT alerts. You can check my
-						client implementation example for an ESP32 andon beacon. I recommend implementing your own custom client
-						that fits your needs.
+						Connect devices like ESP32 to your MQTT broker and start listening for alerts. Use the provided example
+						client to build an Andon-style beacon, or create your own custom implementation tailored to your hardware
+						and use case.
 					</p>
 				</article>
 			</div>

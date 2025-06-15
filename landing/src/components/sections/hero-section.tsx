@@ -44,11 +44,11 @@ export const HeroSection = () => {
 		<section className='relative mt-16 flex w-full flex-col items-center justify-start'>
 			<div className='w-full max-w-[1440px] items-center'>
 				<h1 className='hero-header max-w-[1000px] text-4xl font-semibold text-white sm:text-5xl md:text-6xl'>
-					Forward alerts to physical devices through MQTT
+					Forward Alerts to Physical Devices via MQTT
 				</h1>
 				<p className='sub-header mt-4 max-w-[800px] translate-y-[50px] text-base text-zinc-500 opacity-0 sm:text-lg'>
-					A new way of knowing the status of your homelab. Create a webhook, define the instructions and connect MQTT
-					clients such as ESP32.
+					Create webhooks, define custom instructions, and control devices like ESP32 through MQTT to bring your homelab
+					alerts to life.
 				</p>
 				<Button className='mt-6'>
 					<a href='https://github.com/pavece/stackON' className='flex items-center gap-2'>

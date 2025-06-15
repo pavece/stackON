@@ -56,13 +56,13 @@ export const FeaturesSection = () => {
 					icon={<Table />}
 					className="bg-[url('/images/bento-history.svg')] bg-center bg-no-repeat md:col-span-3 md:row-span-1"
 					title='Event history'
-					subtitle='Built in event history.'
+					subtitle='Track past alerts and actions to review what happened and whne'
 				/>
 				<BentoCard
 					icon={<BotMessageSquare />}
 					className="bg-[url('/images/bento-mcp.svg')] bg-cover bg-center bg-no-repeat md:col-span-3 md:row-span-1"
 					title='MCP server'
-					subtitle='Check information about webhooks and alerts using the built in MCP server.'
+					subtitle='Check information about webhooks and alerts using the built-in MCP server.'
 				/>
 			</div>
 		</section>
