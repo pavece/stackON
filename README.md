@@ -1,4 +1,5 @@
 ![Stackon OG image](https://res.cloudinary.com/dnh0go0q2/image/upload/v1749986994/stackon-og_g9a0o4.png)
+![Docker Pulls](https://img.shields.io/docker/pulls/pavece/stack-on)
 
 # StackON
 
@@ -30,7 +31,7 @@ StackON depends on [MongoDB](https://www.mongodb.com/) and [Mosquitto](https://m
 ```yaml
 services:
    app:
-    image: [UPDATE TO PUBLIC DOCKER IMAGE]
+    image: pavece/stack-on:latest
     environment:
       PORT: 3000
       MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017

@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: stack-on:test
+    image: stack-on:latest
     environment:
       PORT: 3000
       MONGO_CONNECTION_URL: mongodb://root:root@mongodb:27017
