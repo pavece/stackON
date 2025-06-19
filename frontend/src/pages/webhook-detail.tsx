@@ -103,6 +103,14 @@ export const WebhookDetailPage = () => {
 					url={(import.meta.env.VITE_PUBLIC_HOST || 'http://BACKEND_HOST') + `/hook/am/${id}`}
 					method='POST'
 				/>
+				{hook?.type == 'once' && (
+					<CallUrl
+						title='Empty call'
+						description='You can call this endpoint without providing a request body (only compatible with once hooks). Ideal for things like gitlab / gitea webhooks.'
+						url={(import.meta.env.VITE_PUBLIC_HOST || 'http://BACKEND_HOST') + `/hook/empty/${id}`}
+						method='POST | GET'
+					/>
+				)}
 			</div>
 		</div>
 	);
