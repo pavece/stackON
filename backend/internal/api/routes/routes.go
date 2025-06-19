@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/go-chi/chi/v5"
 	alertmanagerhookservice "github.com/pavece/stackON/internal/api/services/alertmanager-hook"
+	emptyhookservice "github.com/pavece/stackON/internal/api/services/empty-hook"
 	eventsservice "github.com/pavece/stackON/internal/api/services/events"
 	webhookservice "github.com/pavece/stackON/internal/api/services/webhooks"
 	"github.com/pavece/stackON/internal/db"
@@ -35,6 +36,11 @@ func MountRoutes(router *chi.Mux) {
 	//Prometheus alert manager specific (controller is service not intended to be called in any other way that's not an HTTP request)
 	amHookService := alertmanagerhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client, &event.MongoEventRepo{Client: db.GetClient()})
 	hookRouter.Post("/am/{id}", amHookService.ForwardEvent)
+
+	//Empty hook specific
+	emptyHookService := emptyhookservice.New(&webhook.MongoWebhookRepo{Client: db.GetClient()}, mqttclient.Client, &event.MongoEventRepo{Client: db.GetClient()})
+	hookRouter.Post("/empty/{id}", emptyHookService.ForwardEvent)
+	hookRouter.Get("/empty/{id}", emptyHookService.ForwardEvent)
 
 	//More services (grafana, pagerduty ...)
 	router.Mount("/hook", hookRouter)

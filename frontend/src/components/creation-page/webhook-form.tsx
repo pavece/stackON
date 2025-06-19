@@ -85,7 +85,7 @@ export const WebhookForm = ({ onSubmit, type, isCreation, initialValues, submiti
 					name='type'
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Topic</FormLabel>
+							<FormLabel>Type</FormLabel>
 							<Select onValueChange={field.onChange} defaultValue={field.value}>
 								<FormControl>
 									<SelectTrigger className='min-w-[140px]'>

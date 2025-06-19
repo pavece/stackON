@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/mark3labs/mcp-go/mcp"
-	alertmanagerhookservice "github.com/pavece/stackON/internal/api/services/alertmanager-hook"
 	eventsservice "github.com/pavece/stackON/internal/api/services/events"
 	webhookservice "github.com/pavece/stackON/internal/api/services/webhooks"
 	"github.com/pavece/stackON/internal/db"
 	"github.com/pavece/stackON/internal/repositories/event"
 	"github.com/pavece/stackON/internal/repositories/webhook"
+	"github.com/pavece/stackON/internal/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -70,7 +70,7 @@ func (tools *MCPTools) getWebhookById(ctx context.Context, request mcp.CallToolR
 	}
 
 	responseWebhok := DetailedWebhookResponse{Id: webhook.Id, Title: webhook.Title, Description: webhook.Description, Type: webhook.Type, Topic: webhook.Topic, CreatedAt: webhook.CreatedAt}
-	responseWebhok.Instructions = alertmanagerhookservice.ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
+	responseWebhok.Instructions = utils.ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
 	jsonData, err := json.Marshal(responseWebhok)
 	if err != nil {
@@ -92,7 +92,7 @@ func (tools *MCPTools) deleteWebhook(ctx context.Context, request mcp.CallToolRe
 	}
 
 	responseWebhok := DetailedWebhookResponse{Id: webhook.Id, Title: webhook.Title, Description: webhook.Description, Type: webhook.Type, Topic: webhook.Topic, CreatedAt: webhook.CreatedAt}
-	responseWebhok.Instructions = alertmanagerhookservice.ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
+	responseWebhok.Instructions = utils.ConvertNodesToInstructionSet(webhook.InstructionNodes, webhook.InstructionConnections)
 
 	jsonData, err := json.Marshal(responseWebhok)
 	if err != nil {
